@@ -2,25 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Employee;
-use App\Models\Position;
-use App\Models\Schedule;
+use App\Models\Manager;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class EmployeeController extends Controller
+class ManagerController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $positions = Position::all();
-        $schedules = Schedule::all();
-        $employees = Employee::with(['user', 'position', 'schedule'])->get();
-
-        return view('admin.employeeslist', compact('positions', 'schedules', 'employees'));
+        $managerList = Manager::with('user') ->whereHas('user', function ($query) {
+            $query->where('role_id', 2);
+        })->get();
+        // echo "<pre>";print_r($managerList);die;
+        return view('admin.managerlist', compact('managerList'));
     }
 
     /**
@@ -40,29 +38,25 @@ class EmployeeController extends Controller
             'name'         => 'required|string|max:255',
             'email'        => 'required|email|unique:users,email',
             'password'     => 'required|min:6|confirmed',
-            'position_id'  => 'required|exists:positions,id',
-            'schedule_id'  => 'required|exists:schedules,id',
             'join_date'    => 'required|date',
             'status'       => 'in:Active,Inactive'
         ]);
     
-        $insertEmployee = User::create([
+        $insertManager = User::create([
             'name'     => $validated['name'],
-            'role_id'  => '3',
+            'role_id'  => '2',
             'email'    => $validated['email'],
             'password' => Hash::make($validated['password']),
         ]);
     
-        if($insertEmployee){
-            Employee::create([
-                'user_id'     => $insertEmployee->id,
-                'position_id' => $validated['position_id'],
-                'schedule_id' => $validated['schedule_id'],
+        if($insertManager){
+            Manager::create([
+                'user_id'     => $insertManager->id,
                 'join_date'   => $validated['join_date'],
                 'status'      => $validated['status'] ?? 'Active',
             ]);
         
-            return redirect()->back()->with('flash_message', ['title' => 'Success!','message' => 'Employee created successfully!',]);
+            return redirect()->back()->with('flash_message', ['title' => 'Success!','message' => 'Manager created successfully!',]);
         }
     }
 
@@ -87,14 +81,12 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $employee = Employee::findOrFail($id);
-        $user = $employee->user;
+        $manager = Manager::findOrFail($id);
+        $user = $manager->user;
 
         $validated = $request->validate([
             'name'              => 'required|string|max:255',
             'email'             => 'required|email|unique:users,email,' . $user->id,
-            'position_id'       => 'required|exists:positions,id',
-            'schedule_id'       => 'required|exists:schedules,id',
             'join_date'         => 'required|date',
             'status'            => 'required|in:Active,Inactive',
         ]);
@@ -104,14 +96,12 @@ class EmployeeController extends Controller
             'email' => $validated['email'],
         ]);
 
-        $employee->update([
-            'position_id'   => $validated['position_id'],
-            'schedule_id'   => $validated['schedule_id'],
+        $manager->update([
             'join_date'     => $validated['join_date'],
             'status'        => $validated['status'],
         ]);
 
-        return redirect()->back()->with('flash_message', ['title' => 'Success!','message' => 'Employee updated successfully.',]);
+        return redirect()->back()->with('flash_message', ['title' => 'Success!','message' => 'Manager updated successfully.',]);
     }
 
     /**
@@ -119,14 +109,14 @@ class EmployeeController extends Controller
      */
     public function destroy(string $id)
     {
-        $employee = Employee::findOrFail($id);
-        $user = $employee->user;
-        $employee->delete();
+        $manager = Manager::findOrFail($id);
+        $user = $manager->user;
+        $manager->delete();
     
         if ($user) {
             $user->delete();
         }
     
-        return redirect()->back()->with('flash_message', ['title' => 'Success!','message' => 'Employee deleted successfully.',]);
+        return redirect()->back()->with('flash_message', ['title' => 'Success!','message' => 'Manager deleted successfully.',]);
     }
 }

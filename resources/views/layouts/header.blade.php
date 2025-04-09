@@ -36,6 +36,9 @@
                 <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
                     <!-- item-->
                     <a class="dropdown-item" href="/profile"><i class="mdi mdi-account-circle m-r-5"></i> Profile</a>
+                    @if(Auth::user()->role_id == 1)
+                    <a class="dropdown-item" href="/notifications"><i class="mdi mdi-bell-outline m-r-5"></i> Notification</a>
+                    @endif
             
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item text-danger" href="{{ route('logout') }}" onclick="event.preventDefault();

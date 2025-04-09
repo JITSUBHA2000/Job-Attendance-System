@@ -3,6 +3,8 @@
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\ManagerController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScheduleController;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +25,8 @@ Route::middleware(['auth', 'role:1,2'])->group(function () {
     Route::resource('/schedule', ScheduleController::class);
     Route::resource('/employees', EmployeeController::class);
     Route::get('/sheet-report', [AttendanceController::class, 'getEmployeeSheetReport']);
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::resource('/manager', ManagerController::class);
 });
 
 Route::middleware(['auth', 'role:3'])->group(function () {

@@ -17,9 +17,7 @@ return new class extends Migration
             $table->date('date');
             $table->time('check_in_time')->nullable();
             $table->time('check_out_time')->nullable();
-            $table->boolean('is_late')->default(false);
-            $table->boolean('left_early')->default(false);
-            $table->string('status')->default('Present');
+            $table->enum('status', ['present', 'absent', 'late', 'early_checkout'])->default('absent');
             $table->unsignedBigInteger('manual_entry_by')->nullable();
             $table->timestamps();
 

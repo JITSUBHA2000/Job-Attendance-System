@@ -19,6 +19,13 @@
                                 <a href="/employees" class="waves-effect {{ request()->is("employees") || request()->is("/employees/*") ? "mm active" : "" }}"><i class="ti-user"></i><span> Employees </span></a>
                             </li>
                             @endif
+
+                            @if(Auth::user()->role_id == 1)
+                            <li>
+                                <a href="/manager" class="waves-effect {{ request()->is("manager") || request()->is("/employees/*") ? "mm active" : "" }}"><i class="ti-user"></i><span> Manager </span></a>
+                            </li>
+                            @endif
+
                             <li class="menu-title">Management</li>
                             @if(Auth::user()->role_id == 1)
                             <li class="">
@@ -41,11 +48,11 @@
                                 </a>
                             </li>
                             @endif
-                            <li class="">
+                            <!-- <li class="">
                                 <a href="/attendance-log" class="waves-effect {{ request()->is("attendance-log") || request()->is("attendance/*") ? "mm active" : "" }}">
                                     <i class="ti-calendar"></i> <span> Attendance Logs </span>
                                 </a>
-                            </li>
+                            </li> -->
 
                         </ul>
                     </div>

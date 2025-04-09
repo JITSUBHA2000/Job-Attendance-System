@@ -56,11 +56,6 @@ class User extends Authenticatable
         return $this->hasMany(Attendance::class);
     }
 
-    public function notifications()
-    {
-        return $this->hasMany(Notification::class);
-    }
-
     public function manualEntries()
     {
         return $this->hasMany(Attendance::class, 'manual_entry_by');
