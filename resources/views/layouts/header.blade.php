@@ -24,7 +24,8 @@
             <div class="dropdown notification-list nav-pro-img">
                 <a class="dropdown-toggle nav-link arrow-none waves-effect nav-user" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                     @if(Auth::user()->role_id == 1)
-                        <img src="assets/images/profile-icon.png" alt="user" class="rounded-circle"> Administrator
+                        <!-- <img src="assets/images/profile-icon.png" alt="user" class="rounded-circle">  -->
+                        Administrator
                     @endif
                     @if(Auth::user()->role_id == 2)
                         Manager
